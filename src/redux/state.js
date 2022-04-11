@@ -1,15 +1,17 @@
-let store={
-    _state:{profilePage:{posts: [
+let store = {
+  _state: {
+    profilePage: {
+      posts: [
         { id: 1, message: "Hi, how are you?", likes: 20, dislikes: 0 },
         { id: 2, message: "Its my first post!", likes: 20, dislikes: 0 },
         { id: 3, message: "I am here!", likes: 20, dislikes: 0 },
         { id: 4, message: "Es mīlu tevi!", likes: 20, dislikes: 0 },
         { id: 5, message: "Haha", likes: 20, dislikes: 0 },
       ],
-      newPostText:"it-kama"
+      newPostText: "it-kama",
     },
-    
-      dialogsPage:{
+
+    dialogsPage: {
       dialogs: [
         { id: 1, name: "Andris" },
         { id: 2, name: "Elita" },
@@ -23,39 +25,40 @@ let store={
         { id: 3, message: "I am here!" },
         { id: 4, message: "Es mīlu tevi!" },
         { id: 5, message: "Haha" },
-      ]}
+      ],
     },
+  },
 
-    getState(){
-        return this._state;
-    },
+  _callSubscriber() {
+    console.log("State changed!");
+  },
 
-    _callSubscriber(){
-    console.log("State changed!")},
+  getState() {
+    return this._state;
+  },
 
-    addPost(){
-        let newPost = {
-        id:6,
+  subscribe(observer) {
+    this._callSubscriber = observer;
+  },
+
+  
+
+  dispatch(action) {
+    if (action.type === "ADD-POST") {
+      let newPost = {
+        id: 6,
         message: this._state.profilePage.newPostText,
-        likes:0,
-        dislikes:0
-        }
-        this._state.profilePage.posts.push(newPost); 
-        this._state.profilePage.newPostText="";
-        this._callSubscriber (this._state);
-        },
+        likes: 0,
+        dislikes: 0,
+      };
+      this._state.profilePage.posts.push(newPost);
+      this._state.profilePage.newPostText = "";
+      this._callSubscriber(this._state);
+    } else if (action.type === "UPDATE-NEW-POST-TEXT") {
+      this._state.profilePage.newPostText = action.newText;
+      this._callSubscriber(this._state);
+    }
+  },
+};
 
-    updateNewPostText(newText){
-        this._state.profilePage.newPostText=newText;
-        this._callSubscriber(this._state);
-        },
-        
-        
-    subscribe(observer){
-        this._callSubscriber=observer;
-        }
-    
-    
-}
-
-export default store
+export default store;
